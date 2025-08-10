@@ -3,6 +3,7 @@ package ma.tmdbapi.controller;
 
 
 
+
 import ma.tmdbapi.service.TmdbService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +16,52 @@ public class TmdbController {
     @Autowired
     private TmdbService tmdbService;
 
-    // New endpoint for clickable cast
-    @GetMapping("/person/{personId}/credits")
-    public String getPersonCredits(@PathVariable String personId) {
-        return tmdbService.getPersonCredits(personId);
+    // --- NEW ENDPOINTS FOR STREAMING ORIGINALS ---
+    @GetMapping("/tv/netflix")
+    public String getNetflixOriginals(@RequestParam(defaultValue = "1") int page) {
+        return tmdbService.getTvShowsByNetwork(213, page); // Netflix ID is 213
     }
 
-    // All other endpoints remain the same...
+    @GetMapping("/tv/disney")
+    public String getDisneyOriginals(@RequestParam(defaultValue = "1") int page) {
+        return tmdbService.getTvShowsByNetwork(2739, page); // Disney+ ID is 2739
+    }
+
+    @GetMapping("/tv/amazon")
+    public String getAmazonOriginals(@RequestParam(defaultValue = "1") int page) {
+        return tmdbService.getTvShowsByNetwork(1024, page); // Amazon ID is 1024
+    }
+
+    @GetMapping("/tv/apple")
+    public String getAppleOriginals(@RequestParam(defaultValue = "1") int page) {
+        return tmdbService.getTvShowsByNetwork(2552, page); // Apple TV+ ID is 2552
+    }
+
+    // All other endpoints...
+    @GetMapping("/movie/high_quality")
+    public String getHighQualityMovies(@RequestParam(defaultValue = "") String genreId, @RequestParam(defaultValue = "1") int page) {
+        return tmdbService.getHighQualityMovies(genreId, page);
+    }
+
+    @GetMapping("/trending/tv")
+    public String getTrendingTvShows(@RequestParam(defaultValue = "1") int page) {
+        return tmdbService.getTrendingTvShows(page);
+    }
+
+    @GetMapping("/movie/new_releases")
+    public String getNewMovieReleases(@RequestParam(defaultValue = "1") int page) {
+        return tmdbService.getNewMovieReleases(page);
+    }
+
+    @GetMapping("/search/movie")
+    public String searchMovies(@RequestParam String query) { return tmdbService.searchMovies(query); }
+
+    @GetMapping("/search/tv")
+    public String searchTvShows(@RequestParam String query) { return tmdbService.searchTvShows(query); }
+
+    @GetMapping("/person/{personId}/credits")
+    public String getPersonCredits(@PathVariable String personId) { return tmdbService.getPersonCredits(personId); }
+
     @GetMapping("/movie/now_playing")
     public String getNowPlayingMovies(@RequestParam(defaultValue = "") String genreId, @RequestParam(defaultValue = "1") int page) {
         return tmdbService.getNowPlayingMovies(genreId, page);
@@ -79,15 +119,4 @@ public class TmdbController {
 
     @GetMapping("/tv/{id}/similar")
     public String getSimilarTvShows(@PathVariable String id) { return tmdbService.getSimilarTvShows(id); }
-
-    @GetMapping("/search/movie")
-    public String searchMovies(@RequestParam String query) { return tmdbService.searchMovies(query); }
-
-    @GetMapping("/search/tv")
-    public String searchTvShows(@RequestParam String query) { return tmdbService.searchTvShows(query); }
-
-    @GetMapping("/movie/high_quality")
-    public String getHighQualityMovies(@RequestParam(defaultValue = "") String genreId, @RequestParam(defaultValue = "1") int page) {
-        return tmdbService.getHighQualityMovies(genreId, page);
-    }
 }
