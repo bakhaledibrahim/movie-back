@@ -13,42 +13,51 @@ public class TmdbService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final String BASE_URL = "https://api.themoviedb.org/3";
 
-    // Helper method for discover endpoint
     private String buildDiscoverUrl(String mediaType, String sortBy, String genreId, int page) {
         String url = BASE_URL + "/discover/" + mediaType + "?api_key=" + apiKey + "&sort_by=" + sortBy + "&page=" + page;
         if (genreId != null && !genreId.isEmpty()) {
             url += "&with_genres=" + genreId;
         }
         if (sortBy.contains("vote_average")) {
-            url += "&vote_count.gte=300"; // Higher threshold for critically acclaimed
+            url += "&vote_count.gte=300";
         }
         return url;
-    }
-
-    // --- ANIME METHODS ---
-    public String getPopularAnime(int page) {
-        // Genre ID for Animation is 16
-        return restTemplate.getForObject(buildDiscoverUrl("tv", "popularity.desc", "16", page), String.class);
-    }
-
-    public String getTopRatedAnime(int page) {
-        return restTemplate.getForObject(buildDiscoverUrl("tv", "vote_average.desc", "16", page), String.class);
-    }
-
-    public String getAnimeByNetwork(int networkId, int page) {
-        String url = BASE_URL + "/discover/tv?api_key=" + apiKey + "&with_networks=" + networkId + "&with_genres=16&sort_by=popularity.desc&page=" + page;
-        return restTemplate.getForObject(url, String.class);
-    }
-
-    // --- GENERAL TV & MOVIE METHODS ---
-    public String getTvShowsByNetwork(int networkId, int page) {
-        String url = BASE_URL + "/discover/tv?api_key=" + apiKey + "&with_networks=" + networkId + "&sort_by=popularity.desc&page=" + page;
-        return restTemplate.getForObject(url, String.class);
     }
 
     public String getHighQualityMovies(String genreId, int page) {
         String url = buildDiscoverUrl("movie", "popularity.desc", genreId, page);
         url += "&with_release_type=5|4"; // Digital or Physical release
+        return restTemplate.getForObject(url, String.class);
+    }
+
+    public String getCriticallyAcclaimedSciFi(int page) {
+        String url = buildDiscoverUrl("movie", "vote_average.desc", "878", page) + "&vote_count.gte=500";
+        return restTemplate.getForObject(url, String.class);
+    }
+
+    public String getMindBendingThrillers(int page) {
+        String url = buildDiscoverUrl("movie", "popularity.desc", "53", page);
+        url += "&with_keywords=9715"; // Keyword for "mind-bending"
+        return restTemplate.getForObject(url, String.class);
+    }
+
+    public String getCollectionDetails(String collectionId) {
+        String url = BASE_URL + "/collection/" + collectionId + "?api_key=" + apiKey;
+        return restTemplate.getForObject(url, String.class);
+    }
+
+    public String getMovieRecommendations(String movieId) {
+        String url = BASE_URL + "/movie/" + movieId + "/recommendations?api_key=" + apiKey;
+        return restTemplate.getForObject(url, String.class);
+    }
+
+    public String getTvRecommendations(String showId) {
+        String url = BASE_URL + "/tv/" + showId + "/recommendations?api_key=" + apiKey;
+        return restTemplate.getForObject(url, String.class);
+    }
+
+    public String getTvShowsByNetwork(int networkId, int page) {
+        String url = BASE_URL + "/discover/tv?api_key=" + apiKey + "&with_networks=" + networkId + "&sort_by=popularity.desc&page=" + page;
         return restTemplate.getForObject(url, String.class);
     }
 
@@ -59,6 +68,11 @@ public class TmdbService {
 
     public String searchTvShows(String query) {
         String url = BASE_URL + "/search/tv?api_key=" + apiKey + "&query=" + query;
+        return restTemplate.getForObject(url, String.class);
+    }
+
+    public String searchMulti(String query, int page) {
+        String url = BASE_URL + "/search/multi?api_key=" + apiKey + "&query=" + query + "&page=" + page;
         return restTemplate.getForObject(url, String.class);
     }
 
@@ -148,19 +162,23 @@ public class TmdbService {
         return restTemplate.getForObject(url, String.class);
     }
 
-    // --- NEW METHODS FOR RECOMMENDATIONS ---
-    public String getMovieRecommendations(String movieId) {
-        String url = BASE_URL + "/movie/" + movieId + "/recommendations?api_key=" + apiKey;
-        return restTemplate.getForObject(url, String.class);
-    }
-
-    public String getTvRecommendations(String showId) {
-        String url = BASE_URL + "/tv/" + showId + "/recommendations?api_key=" + apiKey;
-        return restTemplate.getForObject(url, String.class);
-    }
-
     public String getVideos(String mediaType, String id) {
         String url = BASE_URL + "/" + mediaType + "/" + id + "/videos?api_key=" + apiKey;
+        return restTemplate.getForObject(url, String.class);
+    }
+
+
+    public String getPopularAnime(int page) {
+        // Genre ID for Animation is 16
+        return restTemplate.getForObject(buildDiscoverUrl("tv", "popularity.desc", "16", page), String.class);
+    }
+
+    public String getTopRatedAnime(int page) {
+        return restTemplate.getForObject(buildDiscoverUrl("tv", "vote_average.desc", "16", page), String.class);
+    }
+
+    public String getAnimeByNetwork(int networkId, int page) {
+        String url = BASE_URL + "/discover/tv?api_key=" + apiKey + "&with_networks=" + networkId + "&with_genres=16&sort_by=popularity.desc&page=" + page;
         return restTemplate.getForObject(url, String.class);
     }
 }

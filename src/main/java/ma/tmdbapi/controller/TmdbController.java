@@ -12,38 +12,36 @@ public class TmdbController {
     @Autowired
     private TmdbService tmdbService;
 
-    // --- ANIME ENDPOINTS ---
-    @GetMapping("/anime/popular")
-    public String getPopularAnime(@RequestParam(defaultValue = "1") int page) {
-        return tmdbService.getPopularAnime(page);
+    @GetMapping("/search/multi")
+    public String searchMulti(@RequestParam String query, @RequestParam(defaultValue = "1") int page) {
+        return tmdbService.searchMulti(query, page);
     }
 
-    @GetMapping("/anime/top_rated")
-    public String getTopRatedAnime(@RequestParam(defaultValue = "1") int page) {
-        return tmdbService.getTopRatedAnime(page);
+    @GetMapping("/movie/{movieId}/recommendations")
+    public String getMovieRecommendations(@PathVariable String movieId) {
+        return tmdbService.getMovieRecommendations(movieId);
     }
 
-    @GetMapping("/anime/netflix")
-    public String getNetflixAnime(@RequestParam(defaultValue = "1") int page) {
-        return tmdbService.getAnimeByNetwork(213, page);
+    @GetMapping("/tv/{showId}/recommendations")
+    public String getTvRecommendations(@PathVariable String showId) {
+        return tmdbService.getTvRecommendations(showId);
     }
 
-    @GetMapping("/anime/disney")
-    public String getDisneyAnime(@RequestParam(defaultValue = "1") int page) {
-        return tmdbService.getAnimeByNetwork(2739, page);
+    @GetMapping("/collection/{collectionId}")
+    public String getCollectionDetails(@PathVariable String collectionId) {
+        return tmdbService.getCollectionDetails(collectionId);
     }
 
-    @GetMapping("/anime/hbo")
-    public String getHboAnime(@RequestParam(defaultValue = "1") int page) {
-        return tmdbService.getAnimeByNetwork(49, page);
+    @GetMapping("/movie/acclaimed_scifi")
+    public String getCriticallyAcclaimedSciFi(@RequestParam(defaultValue = "1") int page) {
+        return tmdbService.getCriticallyAcclaimedSciFi(page);
     }
 
-    @GetMapping("/anime/apple")
-    public String getAppleAnime(@RequestParam(defaultValue = "1") int page) {
-        return tmdbService.getAnimeByNetwork(2552, page);
+    @GetMapping("/movie/mind_bending")
+    public String getMindBendingThrillers(@RequestParam(defaultValue = "1") int page) {
+        return tmdbService.getMindBendingThrillers(page);
     }
 
-    // --- GENERAL ENDPOINTS ---
     @GetMapping("/tv/netflix")
     public String getNetflixOriginals(@RequestParam(defaultValue = "1") int page) {
         return tmdbService.getTvShowsByNetwork(213, page);
@@ -78,12 +76,6 @@ public class TmdbController {
     public String getNewMovieReleases(@RequestParam(defaultValue = "1") int page) {
         return tmdbService.getNewMovieReleases(page);
     }
-
-    @GetMapping("/search/movie")
-    public String searchMovies(@RequestParam String query) { return tmdbService.searchMovies(query); }
-
-    @GetMapping("/search/tv")
-    public String searchTvShows(@RequestParam String query) { return tmdbService.searchTvShows(query); }
 
     @GetMapping("/person/{personId}/credits")
     public String getPersonCredits(@PathVariable String personId) { return tmdbService.getPersonCredits(personId); }
@@ -146,21 +138,39 @@ public class TmdbController {
     @GetMapping("/tv/{id}/similar")
     public String getSimilarTvShows(@PathVariable String id) { return tmdbService.getSimilarTvShows(id); }
 
-
-    @GetMapping("/movie/{movieId}/recommendations")
-    public String getMovieRecommendations(@PathVariable String movieId) {
-        return tmdbService.getMovieRecommendations(movieId);
-    }
-
-    @GetMapping("/tv/{showId}/recommendations")
-    public String getTvRecommendations(@PathVariable String showId) {
-        return tmdbService.getTvRecommendations(showId);
-    }
-
     @GetMapping("/{mediaType}/{id}/videos")
     public String getVideos(@PathVariable String mediaType, @PathVariable String id) {
         return tmdbService.getVideos(mediaType, id);
     }
 
 
+    @GetMapping("/anime/popular")
+    public String getPopularAnime(@RequestParam(defaultValue = "1") int page) {
+        return tmdbService.getPopularAnime(page);
+    }
+
+    @GetMapping("/anime/top_rated")
+    public String getTopRatedAnime(@RequestParam(defaultValue = "1") int page) {
+        return tmdbService.getTopRatedAnime(page);
+    }
+
+    @GetMapping("/anime/netflix")
+    public String getNetflixAnime(@RequestParam(defaultValue = "1") int page) {
+        return tmdbService.getAnimeByNetwork(213, page);
+    }
+
+    @GetMapping("/anime/disney")
+    public String getDisneyAnime(@RequestParam(defaultValue = "1") int page) {
+        return tmdbService.getAnimeByNetwork(2739, page);
+    }
+
+    @GetMapping("/anime/hbo")
+    public String getHboAnime(@RequestParam(defaultValue = "1") int page) {
+        return tmdbService.getAnimeByNetwork(49, page);
+    }
+
+    @GetMapping("/anime/apple")
+    public String getAppleAnime(@RequestParam(defaultValue = "1") int page) {
+        return tmdbService.getAnimeByNetwork(2552, page);
+    }
 }
