@@ -161,4 +161,6 @@ public class TmdbController {
     public String getVideos(@PathVariable String mediaType, @PathVariable String id) {
         return tmdbService.getVideos(mediaType, id);
     }
+
+
 }
