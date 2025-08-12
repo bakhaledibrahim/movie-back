@@ -173,4 +173,21 @@ public class TmdbController {
     public String getAppleAnime(@RequestParam(defaultValue = "1") int page) {
         return tmdbService.getAnimeByNetwork(2552, page);
     }
+
+    @GetMapping("/bento")
+    public String getBentoBoxContent() {
+        return tmdbService.getBentoBoxContent();
+    }
+
+    @GetMapping("/discover/by_genres")
+    public String getMoviesByGenreList(@RequestParam String genreIds, @RequestParam(defaultValue = "1") int page) {
+        return tmdbService.getMoviesByGenreList(genreIds, page);
+    }
+
+    @GetMapping("/search/movie")
+    public String searchMovies(@RequestParam String query) { return tmdbService.searchMovies(query); }
+
+    @GetMapping("/search/tv")
+    public String searchTvShows(@RequestParam String query) { return tmdbService.searchTvShows(query); }
+    
 }

@@ -30,16 +30,16 @@ public class TmdbService {
         return restTemplate.getForObject(url, String.class);
     }
 
-    public String getCriticallyAcclaimedSciFi(int page) {
-        String url = buildDiscoverUrl("movie", "vote_average.desc", "878", page) + "&vote_count.gte=500";
-        return restTemplate.getForObject(url, String.class);
-    }
-
-    public String getMindBendingThrillers(int page) {
-        String url = buildDiscoverUrl("movie", "popularity.desc", "53", page);
-        url += "&with_keywords=9715"; // Keyword for "mind-bending"
-        return restTemplate.getForObject(url, String.class);
-    }
+//    public String getCriticallyAcclaimedSciFi(int page) {
+//        String url = buildDiscoverUrl("movie", "vote_average.desc", "878", page) + "&vote_count.gte=500";
+//        return restTemplate.getForObject(url, String.class);
+//    }
+//
+//    public String getMindBendingThrillers(int page) {
+//        String url = buildDiscoverUrl("movie", "popularity.desc", "53", page);
+//        url += "&with_keywords=9715"; // Keyword for "mind-bending"
+//        return restTemplate.getForObject(url, String.class);
+//    }
 
     public String getCollectionDetails(String collectionId) {
         String url = BASE_URL + "/collection/" + collectionId + "?api_key=" + apiKey;
@@ -99,13 +99,13 @@ public class TmdbService {
         return restTemplate.getForObject(url, String.class);
     }
 
-    public String getPopularMovies(String genreId, int page) {
-        return restTemplate.getForObject(buildDiscoverUrl("movie", "popularity.desc", genreId, page), String.class);
-    }
-
-    public String getTopRatedMovies(String genreId, int page) {
-        return restTemplate.getForObject(buildDiscoverUrl("movie", "vote_average.desc", genreId, page), String.class);
-    }
+//    public String getPopularMovies(String genreId, int page) {
+//        return restTemplate.getForObject(buildDiscoverUrl("movie", "popularity.desc", genreId, page), String.class);
+//    }
+//
+//    public String getTopRatedMovies(String genreId, int page) {
+//        return restTemplate.getForObject(buildDiscoverUrl("movie", "vote_average.desc", genreId, page), String.class);
+//    }
 
     public String getPopularTvShows(String genreId, int page) {
         return restTemplate.getForObject(buildDiscoverUrl("tv", "popularity.desc", genreId, page), String.class);
@@ -181,4 +181,48 @@ public class TmdbService {
         String url = BASE_URL + "/discover/tv?api_key=" + apiKey + "&with_networks=" + networkId + "&with_genres=16&sort_by=popularity.desc&page=" + page;
         return restTemplate.getForObject(url, String.class);
     }
+
+    public String getBentoBoxContent() {
+        // This is a simplified example. A real implementation might have more complex logic
+        // to curate the content for the bento box.
+        String url = BASE_URL + "/movie/popular?api_key=" + apiKey + "&page=1";
+        return restTemplate.getForObject(url, String.class);
+    }
+
+
+    // This method now correctly sorts by vote average
+    public String getCriticallyAcclaimedSciFi(int page) {
+        String url = buildDiscoverUrl("movie", "vote_average.desc", "878", page) + "&vote_count.gte=500";
+        return restTemplate.getForObject(url, String.class);
+    }
+
+    // This method correctly sorts by popularity
+    public String getMindBendingThrillers(int page) {
+        String url = buildDiscoverUrl("movie", "popularity.desc", "53", page);
+        url += "&with_keywords=9715";
+        return restTemplate.getForObject(url, String.class);
+    }
+
+    // This method correctly sorts by popularity
+    public String getPopularMovies(String genreId, int page) {
+        return restTemplate.getForObject(buildDiscoverUrl("movie", "popularity.desc", genreId, page), String.class);
+    }
+
+    // This method now correctly sorts by vote average
+    public String getTopRatedMovies(String genreId, int page) {
+        return restTemplate.getForObject(buildDiscoverUrl("movie", "vote_average.desc", genreId, page), String.class);
+    }
+
+    public String getMoviesByGenreList(String genreIds, int page) {
+        // This method is more flexible as it can accept a comma-separated list of genre IDs
+        String url = BASE_URL + "/discover/movie?api_key=" + apiKey + "&with_genres=" + genreIds + "&sort_by=popularity.desc&page=" + page;
+        return restTemplate.getForObject(url, String.class);
+    }
+
+
+
+
+
+
+
 }
